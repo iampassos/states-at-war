@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "./colors.c"
 #include "./objectives.c"
 #include "./players.c"
 #include "./territories.c"
@@ -23,15 +24,11 @@ int player_count = 0;
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 
-char *colors[6] = {
-    "blue", "yellow", "white", "red", "black", "green",
-};
-
 void setup() {
   for (int i = 0; i < player_count; i++) {
     printf("Player %d name: ", i + 1);
     scanf("%s", players[i].username);
-    players[i].color = colors[i];
+    players[i].color = colors[i].name;
     players[i].objective = objectives[i];
   }
 
