@@ -39,6 +39,7 @@ void setup() {
     j %= player_count;
     territories[i].name = territory_names[i];
     territories[i].owner = players[j].color;
+    territories[i].troops = 1;
   }
 }
 
@@ -98,10 +99,6 @@ int main(int argc, char *argv[]) {
   player_count = atoi(argv[1]);
 
   setup();
-
-  for (int i = 0; i < TERRITORIES_COUNT; i++) {
-    printf("%s %s\n", territories[i].name, territories[i].owner);
-  }
 
   while (game_is_runnning) {
     process_input();

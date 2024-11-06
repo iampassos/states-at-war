@@ -49,6 +49,7 @@ char *territory_names[] = {"Alaska",
 struct Territory {
   char *name;
   char *owner;
+  int troops;
 } territories[TERRITORIES_COUNT];
 
 #endif
