@@ -1,5 +1,5 @@
-#ifndef OBJECTIVE_C
-#define OBJECTIVE_C
+#ifndef OBJECTIVES_C
+#define OBJECTIVES_C
 
 struct Objective {
   int id;
