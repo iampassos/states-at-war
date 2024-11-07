@@ -4,7 +4,7 @@
 #include "./objectives.c"
 
 struct Player {
-  char username[30];
+  char *username;
   char *color;
   struct Objective objective;
 } players[6];
