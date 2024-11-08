@@ -96,6 +96,11 @@ void render(SDL_Texture *backgroundTexture, SDL_Texture *textures[],
     SDL_RenderCopy(renderer, textures[i], NULL, &rect);
   }
 
+  for (int i = 0; i < player_count; i++) {
+    SDL_Color white = {255, 255, 255};
+    render_text(char *text, TTF_Font *font, SDL_Color color, int x, int y)
+  }
+
   SDL_RenderPresent(renderer);
 }
 

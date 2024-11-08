@@ -1,5 +1,5 @@
 CC = gcc
-C_FLAGS = `sdl2-config --cflags --libs` -lSDL2_image
+C_FLAGS = `sdl2-config --cflags --libs` -lSDL2_image -lSDL2_ttf
 
 all: game
 
