@@ -2,6 +2,8 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_surface.h>
@@ -41,7 +43,8 @@ void render_text(char *text, TTF_Font *font, SDL_Color color, int x, int y) {
 }
 
 void setup() {
-  char *names[6] = {"One", "Two", "Three", "Four", "Five", "Six"};
+  char *names[6] = {"PlayerOne",  "PlayerTwo",  "PlayerThree",
+                    "PlayerFour", "PlayerFive", "PlayerSix"};
 
   for (int i = 0; i < player_count; i++) {
     players[i].color = colors[i];
@@ -75,7 +78,7 @@ void process_input(void) {
 void update(void) { SDL_Delay(FRAME_TARGET_TIME); }
 
 void render(SDL_Texture *backgroundTexture, SDL_Texture *textures[],
-            TTF_Font *font) {
+            TTF_Font *fonts[]) {
   SDL_RenderClear(renderer);
 
   SDL_Rect backgroundRect = {
@@ -96,8 +99,39 @@ void render(SDL_Texture *backgroundTexture, SDL_Texture *textures[],
     SDL_RenderCopy(renderer, textures[i], NULL, &rect);
   }
 
+  SDL_Color color = {255, 255, 255};
+
   for (int i = 0; i < player_count; i++) {
+    render_text(players[i].username, fonts[1], color, 30, 30 + (90 * i));
+
+    int troopsCount = 0;
+    int territoriesCount = 0;
+
+    for (int j = 0; j < TERRITORIES_COUNT; j++) {
+      if (strcmp(territories[j].color.name, players[i].color.name) == 0) {
+        troopsCount += territories[j].troops;
+        territoriesCount++;
+      }
+    }
+
+    char troopsStr[3];
+    char territoriesStr[3];
+
+    sprintf(troopsStr, "%d", troopsCount);
+    sprintf(territoriesStr, "%d", territoriesCount);
+
+    char troops[30];
+    strcat(strcpy(troops, "Troops: "), troopsStr);
+    render_text(troops, fonts[0], color, 40, 65 + (90 * i));
+
+    char territories[30];
+    strcat(strcpy(territories, "Territories: "), territoriesStr);
+    render_text(territories, fonts[0], color, 40, 90 + (90 * i));
   }
+
+  char turn[20];
+  strcat(strcpy(turn, players[player_turn].color.name), "'s Turn");
+  render_text(turn, fonts[2], color, 1000, 30);
 
   SDL_RenderPresent(renderer);
 }
@@ -144,10 +178,13 @@ int main(int argc, char *argv[]) {
 
   SDL_Texture *textures[TERRITORIES_COUNT];
 
-  TTF_Font *fontBold = TTF_OpenFont("assets/fonts/fontbold.ttf", 48);
-  TTF_Font *fontRegular = TTF_OpenFont("assets/fonts/fontregular.ttf", 48);
+  TTF_Font *fonts[3] = {
+      TTF_OpenFont("assets/fonts/fontregular.ttf", 24),
+      TTF_OpenFont("assets/fonts/fontregular.ttf", 28),
+      TTF_OpenFont("assets/fonts/fontbold.ttf", 48),
+  };
 
-  if (!fontBold || !fontRegular) {
+  if (!fonts[0] || !fonts[1] || !fonts[2]) {
     printf("Error loading font\n");
     return 1;
   }
@@ -159,7 +196,7 @@ int main(int argc, char *argv[]) {
   while (game_is_runnning) {
     process_input();
     update();
-    render(backgroundTexture, textures, fontRegular);
+    render(backgroundTexture, textures, fonts);
   }
 
   SDL_DestroyRenderer(renderer);
